@@ -1,0 +1,62 @@
+######################################################################
+# docker compose alpine phpmyadmin
+# Setup Diagram
+#
+# web   --> php       --> db
+# nginx --> php-fpm   --> mariadb
+# HTTP  --> port 9000 --> port 3306
+# 
+# Status - Just contain the Nginx Deployment Part
+# Docker Compose YAML version
+  version: "3"
+
+# Services definition
+  services: 
+    # HTTP site to which user connects
+    web:
+
+      # The image to use from Docker Hub
+      # https://hub.docker.com/r/broadtech/alpine-nginx/      
+      image: broadtech/alpine-nginx:latest
+      
+      # Some services (web) use the 'deploy' key, which will be ignored. 
+      # Compose does not support 'deploy' configuration - 
+      # use `docker stack deploy` to deploy to a swarm
+      # Deployment Details
+      #deploy: 
+       
+        # Number of container instances to run
+        #replicas: 5
+
+        # Set resource limits
+        #resources:
+          #limits:      
+            # Limit each container to use only 5% CPU 
+            # across all instances
+            #cpus: "0.1"
+
+            # Limit each container to use only 100 MB of RAM
+            #memory: 50M
+
+        # Restart failed containers immediately
+        #restart_policy:
+          #condition: on-failure
+
+      # Port Mapping web's PORT 80 to host PORT 80
+      ports:
+        - "80:80"
+     
+      # Share PORT 80 of all containers through a load
+      # balanced network
+      networks: 
+        - webnet
+
+  # Define 'webnet' network with default settings
+  # which is a load-balanced overlay network
+  networks: 
+    webnet:
+
+#######################---END---#####################################
+
+
+
