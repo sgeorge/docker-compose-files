@@ -1,0 +1,38 @@
+######################################################################
+# docker compose alpine phpmyadmin
+# Setup Diagram
+#
+#            <--> php-fpm
+#  nginx --> |
+#            -----------> db
+#
+# Docker Compose YAML version
+  version: "3"
+
+# Services definition
+  services:
+    # HTTP site to which user connects
+    web:
+      # Build HTTP server from Dockerfile in nginx directory
+      #image: broadtech/alpine-nginx
+      build: ./nginx
+      # Port Mapping web's PORT 80 to host PORT 80
+      ports:
+        - "80:80"
+      # Specify code location
+      # "/host/system/directory/path:/container/directory/path"
+      #volumes:
+      # - "/var/data:/var/www/localhost/htdocs"
+      restart: always
+      # Other connected services
+      depends_on:
+      -  php
+
+    php:
+      build: ./php7-fpm
+      ports:
+        - "9000:9000"
+      #volumes:
+      #- "/var/data:/var/www/"
+      restart: always
+#######################---END---#####################################
