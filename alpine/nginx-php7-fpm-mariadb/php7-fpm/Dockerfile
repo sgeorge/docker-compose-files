@@ -20,7 +20,9 @@ RUN apk --no-cache add busybox \
                        php7-mcrypt \
                        php7-mysqli \
                        php7-zip \
-                       php7-zlib
+                       php7-zlib \
+                       php7-mbstring \
+                       php7-session
 
 # PHP FPM Pool configuration
 COPY conf/www.conf /etc/php7/php-fpm.d/

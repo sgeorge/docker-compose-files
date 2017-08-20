@@ -2,9 +2,7 @@
 # docker compose alpine phpmyadmin
 # Setup Diagram
 #
-#            <--> php-fpm
-#  nginx --> |
-#            -----------> db
+#  nginx <----> php-fpm <----> db
 #
 # Docker Compose YAML version
   version: "3"
@@ -21,18 +19,30 @@
         - "80:80"
       # Specify code location
       # "/host/system/directory/path:/container/directory/path"
-      #volumes:
-      # - "/var/data:/var/www/localhost/htdocs"
+      volumes:
+        - "/var/data/phpMyAdmin:/var/www/localhost/htdocs"
       restart: always
       # Other connected services
       depends_on:
-      -  php
+        - php
 
     php:
       build: ./php7-fpm
       ports:
         - "9000:9000"
-      #volumes:
-      #- "/var/data:/var/www/"
+      volumes:
+        - "/var/data/phpMyAdmin:/var/www/localhost/htdocs"
       restart: always
+      # Other connected services
+      depends_on:
+        - db
+
+    db:
+      image: broadtech/alpine-mariadb
+      environment:
+        - MYSQL_ROOT_PASSWORD=wdGK32k1V6x
+      restart: always
+
+
+
 #######################---END---#####################################
